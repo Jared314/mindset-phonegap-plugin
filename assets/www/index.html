@@ -1,0 +1,93 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>PhoneGap</title>
+<script type="text/javascript" charset="utf-8" src="phonegap-0.9.3.js"></script>
+<script type="text/javascript" charset="utf-8" src="mindset.js"></script>
+
+
+<script type="text/javascript" charset="utf-8">
+var watchId = null;
+var my_media = new Media("Billy Talent - Lies.mp3");
+var db = null;
+
+
+function populateDB(tx){
+tx.executeSql('CREATE TABLE IF NOT EXISTS datalog (id INTEGER PRIMARY KEY AUTOINCREMENT, created BIGINT, mediaposition INTEGER, signal INTEGER, attention INTEGER, focus INTEGER)');
+}
+
+function dblog(pos, signal, att, focus){}
+
+ document.addEventListener('deviceready', function() {
+    
+	    // Init DB
+	    db = window.openDatabase("mindset_signal_log", "1.0", "Mindset Signal Log", 1000000);
+		db.transaction(populateDB);
+		
+	    
+	    var start = document.getElementById("runbtn");
+	    
+	    start.onclick = function() {
+	    	printStatus("Starting Watch");
+	    	watchId = window.plugins.mindset.watchData(
+	    		function(r){
+	    			my_media.getCurrentPosition(
+	    				function(p){ printResult(r, p); }
+	    				);
+	    		},
+			    function(e){log(e);},
+			    {deviceAddress:'00:13:EF:00:22:EA'}
+		    );
+			printStatus("Started Watch");
+			
+			printStatus("Starting Media");
+			my_media.play();
+			printStatus("Started Media");
+	    };
+	    
+	    var stop = document.getElementById("stopbtn");
+	    stop.onclick = function() {
+	    	printStatus("Clearing Watch");
+			window.plugins.mindset.clearWatch(watchId);
+			printStatus("Cleared Watch");
+			
+			printStatus("Stopping Media");
+			my_media.stop();
+			printStatus("Stopped Media");
+		};
+		
+		start.disabled = false;
+		stop.disabled = false;
+ }, true);
+ 
+ function printStatus(message){
+	 document.getElementById("status").innerHTML = message;
+ }
+ 
+ function printResult(data, position){
+    db.transaction(function(tx){
+    	var current = new Date();
+    	var currentTime = current.getTime();
+    	tx.executeSql('INSERT INTO datalog (mediaposition, signal, attention, focus, created) VALUES ('+position+','+data.signal+','+data.attention+','+data.meditation+', '+currentTime+')');  
+    });
+    document.getElementById("signal").innerHTML = data.signal;
+    document.getElementById("attention").innerHTML = data.attention;
+    document.getElementById("meditation").innerHTML = data.meditation;
+    document.getElementById("mediaposition").innerHTML = position;
+ }
+
+</script>		
+</head>
+<body>
+    <input id="runbtn" disabled type="button" value="Run" style="font-size:3em;" />
+    <input id="stopbtn" disabled type="button" value="Stop" style="font-size:3em;" />
+    <hr>
+    <div>Status: <span id="status"></span></div>
+    <br/>
+    <div>Signal: <span id="signal"></span></div>
+    <div>Attention: <span id="attention"></span></div>
+    <div>Meditation: <span id="meditation"></span></div>
+    <br/>
+    <div>Media Position: <span id="mediaposition"></span></div>
+</body>
+</html>
