@@ -24,6 +24,8 @@ function dblog(pos, signal, att, focus){}
 	    db = window.openDatabase("mindset_signal_log", "1.0", "Mindset Signal Log", 1000000);
 		db.transaction(populateDB);
 		
+		window.plugins.bluetooth.listDevices(function(d){}, function(e){});
+		
 	    
 	    var start = document.getElementById("runbtn");
 	    
