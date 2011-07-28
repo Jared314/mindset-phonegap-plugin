@@ -8,7 +8,7 @@
 
 <script type="text/javascript" charset="utf-8">
 var watchId = null;
-var my_media = new Media("Billy Talent - Lies.mp3");
+var my_media = new Media("sleep/02-Deep Trance.flac");
 var db = null;
 
 
@@ -24,7 +24,7 @@ function dblog(pos, signal, att, focus){}
 	    db = window.openDatabase("mindset_signal_log", "1.0", "Mindset Signal Log", 1000000);
 		db.transaction(populateDB);
 		
-		window.plugins.bluetooth.listDevices(function(d){}, function(e){});
+		//window.plugins.bluetooth.listDevices(function(d){}, function(e){});
 		
 	    
 	    var start = document.getElementById("runbtn");
@@ -32,7 +32,7 @@ function dblog(pos, signal, att, focus){}
 	    start.onclick = function() {
 	    	printStatus("Starting Watch");
 	    	watchId = window.plugins.mindset.watchData(
-	    		function(r){
+	    		function(r, delta){
 	    			my_media.getCurrentPosition(
 	    				function(p){ printResult(r, p); }
 	    				);

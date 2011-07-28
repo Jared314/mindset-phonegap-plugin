@@ -1,6 +1,7 @@
 
 function MindSet() {
 	this.listeners = {};
+	this.history = [];
 }
 
 function MindSetDataError(code, message) {
@@ -48,14 +49,27 @@ MindSet.prototype.success = function(id, data) {
         if (data == "undefined") {
             this.listeners[id].fail(new MindSetDataError(MindSetDataError.GENERAL_ERROR, "data is undefined."));
         } else {
-            this.lastData = data;
-            this.listeners[id].success(data);
+            var delta = this.createDelta(this.history[0], data);
+            this.history[0] = data;
+            this.listeners[id].success(data, delta);
         }
     }
     catch (e) {
         console.log("MindSet Error: Error calling success callback function.");
     }
 };
+
+// Assumes object a and object b have the same properties
+MindSet.prototype.createDelta = function(a, b) {
+	var result = b;
+
+	if(a)
+		for(var x in a)
+			if(typeof(a[x]) === "number" && typeof(b[x]) === "number")
+				result[x] = b[x] - a[x];
+	
+	return result;
+}
 
 /**
  * Native callback when watch position has an error.
