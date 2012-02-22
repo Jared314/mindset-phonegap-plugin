@@ -8,7 +8,7 @@
 
 <script type="text/javascript" charset="utf-8">
 var watchId = null;
-var my_media = new Media("sleep/02-Deep Trance.flac");
+//var my_media = new Media("");
 var db = null;
 
 
@@ -24,7 +24,9 @@ function dblog(pos, signal, att, focus){}
 	    db = window.openDatabase("mindset_signal_log", "1.0", "Mindset Signal Log", 1000000);
 		db.transaction(populateDB);
 		
-		//window.plugins.bluetooth.listDevices(function(d){}, function(e){});
+		window.plugins.bluetooth.listDevices(function(d){
+			alert(d);
+		}, function(e){});
 		
 	    
 	    var start = document.getElementById("runbtn");
@@ -33,9 +35,9 @@ function dblog(pos, signal, att, focus){}
 	    	printStatus("Starting Watch");
 	    	watchId = window.plugins.mindset.watchData(
 	    		function(r){
-	    			my_media.getCurrentPosition(
-	    				function(p){ printResult(r, p); }
-	    				);
+	    			//my_media.getCurrentPosition(function(p){ 
+	    				printResult(r, p);
+	    				//});
 	    		},
 			    function(e){log(e);},
 			    {deviceAddress:'00:13:EF:00:22:EA'}
@@ -43,7 +45,7 @@ function dblog(pos, signal, att, focus){}
 			printStatus("Started Watch");
 			
 			printStatus("Starting Media");
-			my_media.play();
+			//my_media.play();
 			printStatus("Started Media");
 	    };
 	    
@@ -54,7 +56,7 @@ function dblog(pos, signal, att, focus){}
 			printStatus("Cleared Watch");
 			
 			printStatus("Stopping Media");
-			my_media.stop();
+			//my_media.stop();
 			printStatus("Stopped Media");
 		};
 		
