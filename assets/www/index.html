@@ -32,7 +32,7 @@ function dblog(pos, signal, att, focus){}
 	    start.onclick = function() {
 	    	printStatus("Starting Watch");
 	    	watchId = window.plugins.mindset.watchData(
-	    		function(r, delta){
+	    		function(r){
 	    			my_media.getCurrentPosition(
 	    				function(p){ printResult(r, p); }
 	    				);

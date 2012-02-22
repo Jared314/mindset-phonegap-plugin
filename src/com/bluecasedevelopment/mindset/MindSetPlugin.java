@@ -9,7 +9,7 @@ import java.util.Map.Entry;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import android.util.Log;
+//import android.util.Log;
 
 import com.phonegap.api.Plugin;
 import com.phonegap.api.PluginResult;
@@ -33,27 +33,27 @@ public class MindSetPlugin extends Plugin {
 
 	@Override
 	public PluginResult execute(String action, JSONArray args, String callbackId) {
-		Log.d("MindSetPlugin", "Plugin Called");
+		//Log.d("MindSetPlugin", "Plugin Called");
 		PluginResult result = null;
 		PluginResult.Status status = PluginResult.Status.OK;
 
 		try {
 			if (START_ACTION.equals(action)) {
-				Log.d("MindSetPlugin", "Start passed");
+				//Log.d("MindSetPlugin", "Start passed");
 				String o = start(args.getString(0), args.getBoolean(1), args
 						.getInt(2), args.getInt(3), args.getString(4));
 				result = new PluginResult(status, o);
 
 			} else if (STOP_ACTION.equals(action)) {
-				Log.d("MindSetPlugin", "Stop passed");
+				//Log.d("MindSetPlugin", "Stop passed");
 				stop(args.getString(0));
 				result = new PluginResult(status, "");
 
 			} else {
 				result = new PluginResult(Status.INVALID_ACTION);
-				Log
-						.d("MindSetPlugin", "Invalid action : " + action
-								+ " passed");
+				//Log
+				//		.d("MindSetPlugin", "Invalid action : " + action
+				//				+ " passed");
 			}
 		} catch (JSONException ex) {
 		}

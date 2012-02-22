@@ -49,9 +49,9 @@ MindSet.prototype.success = function(id, data) {
         if (data == "undefined") {
             this.listeners[id].fail(new MindSetDataError(MindSetDataError.GENERAL_ERROR, "data is undefined."));
         } else {
-            var delta = this.createDelta(this.history[0], data);
-            this.history[0] = data;
-            this.listeners[id].success(data, delta);
+            //var delta = this.createDelta(this.history[0], data);
+            //this.history[0] = data;
+            this.listeners[id].success(data);
         }
     }
     catch (e) {
